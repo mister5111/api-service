@@ -1,0 +1,23 @@
+name: Destroy
+
+on:
+    workflow_dispatch:
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v1
+      
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up gcloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Destroy instances
+        run: |
+            gcloud compute instances delete kodi-deploy --zone=europe-central2-a --quiet
