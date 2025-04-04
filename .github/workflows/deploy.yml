@@ -28,6 +28,9 @@ jobs:
 
       - name: Create instances
         run: |
+            gcloud -v
+            gcloud projects list
+            gcloud compute instances create kodi-deploy-docker --machine-type=g1-small --tags http-server,https-server --zone=europe-central2-a
             IP_kodi_deploy_docker=$(gcloud compute instances list --filter="name=kodi-deploy-docker" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
             echo $IP_kodi-deploy-docker
             echo "IP_instances=$IP_kodi_deploy_docker" >> $GITHUB_ENV
@@ -55,7 +58,7 @@ jobs:
       - name: Wait server sleep 20sec
         run: |
           echo "$IP_instances"
-      #     sleep 20
+          sleep 20
 
 
       - name: Copy project
@@ -69,7 +72,13 @@ jobs:
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/deploy ${{ secrets.SSH_USER }}@$IP_instances <<'ENDSSH'
           sudo -s
           apt update -y
-          apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+          apt install apt-transport-https ca-certificates curl software-properties-common -y
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          apt update -y
+          apt-cache policy docker-ce
+          apt install docker-ce -y
+          systemctl status docker
           tar -xvf api-service.tar -C /var/www/ --overwrite
           ls -la /var/www/
           ENDSSH
