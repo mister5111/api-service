@@ -71,7 +71,7 @@ jobs:
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/deploy ${{ secrets.SSH_USER }}@$IP_instances <<'ENDSSH'
           sudo -s
-          apt update -y
+          apt update -y && apt upgrade -y
           apt-get update
           apt-get install ca-certificates curl
           install -m 0755 -d /etc/apt/keyrings
