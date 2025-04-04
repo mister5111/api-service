@@ -49,6 +49,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY_PRIVATE }}" > ~/.ssh/deploy
           chmod 600 ~/.ssh/deploy
+          ls -la ~/.ssh/deploy
           
         
       - name: Wait server sleep 20sec
@@ -59,6 +60,7 @@ jobs:
 
       - name: Copy project
         run: |
+          echo "$IP_instances"
           scp -i ~/.ssh/deploy -o 'StrictHostKeyChecking no' api-service.tar ${{ secrets.SSH_USER }}@$IP_instances:/home/deploy/
     
 
