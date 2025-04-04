@@ -58,9 +58,9 @@ jobs:
           chmod 600 ~/.ssh/deploy
           
         
-      # - name: Wait server sleep 20sec
-      #   run: |
-      #     echo "$IP_instances"
+      - name: Wait server sleep 20sec
+        run: |
+          echo "$IP_instances"
       #     sleep 20
 
 
