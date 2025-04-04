@@ -35,7 +35,7 @@ jobs:
             gcloud -v
             gcloud projects list
             gcloud compute instances create kodi-deploy-docker --machine-type=g1-small --tags http-server,https-server --zone=europe-central2-a
-            Ip_Kodi_Deploy=$(gcloud compute instances list --filter="name=kodi-deploy-docker" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
+            IP_kodi-deploy-docker=$(gcloud compute instances list --filter="name=kodi-deploy-docker" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
             echo $IP_kodi-deploy-docker
             echo "IP_instances=$IP_kodi-deploy-docker" >> $GITHUB_ENV
 
