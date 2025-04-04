@@ -20,4 +20,4 @@ jobs:
 
       - name: Destroy instances
         run: |
-            gcloud compute instances delete kodi-deploy --zone=europe-central2-a --quiet
+            gcloud compute instances delete kodi-deploy-docker --zone=europe-central2-a --quiet
