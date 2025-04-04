@@ -14,42 +14,35 @@ jobs:
       - name: Git clone
         uses: actions/checkout@v1
 
-      # - name: Set Config for Nginx
-      #   run: |
-      #       sed -i "s/{{WORD}}/${{ vars.USER_NAME }}/g" index.html
-
       - name: Create ZIP
         run: |
             tar --exclude='.git' --exclude='.vscode' -cvf api-service.tar .
           
-      # - name: Authenticate with Google Cloud
-      #   uses: google-github-actions/auth@v1
-      #   with:
-      #     credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      # - name: Set up gcloud SDK
-      #   uses: google-github-actions/setup-gcloud@v1
+      - name: Set up gcloud SDK
+        uses: google-github-actions/setup-gcloud@v1
 
-      # - name: Create instances
-      #   run: |
-      #       gcloud -v
-      #       gcloud projects list
-      #       gcloud compute instances create kodi-deploy-docker --machine-type=g1-small --tags http-server,https-server --zone=europe-central2-a
-      #       IP_kodi_deploy_docker=$(gcloud compute instances list --filter="name=kodi-deploy-docker" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
-      #       echo $IP_kodi-deploy-docker
-      #       echo "IP_instances=$IP_kodi_deploy_docker" >> $GITHUB_ENV
+      - name: Create instances
+        run: |
+            IP_kodi_deploy_docker=$(gcloud compute instances list --filter="name=kodi-deploy-docker" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
+            echo $IP_kodi-deploy-docker
+            echo "IP_instances=$IP_kodi_deploy_docker" >> $GITHUB_ENV
 
-      # - name: Update repository variable
-      #   run: |
-      #     REPO="mister5111/api-service"
-      #     VAR_NAME="IP_INSTANCES"
-      #     NEW_VALUE="$IP_instances"
+      - name: Update repository variable
+        run: |
+          REPO="mister5111/api-service"
+          VAR_NAME="IP_INSTANCES"
+          NEW_VALUE="$IP_instances"
 
-      #     curl -s -X PATCH "https://api.github.com/repos/$REPO/actions/variables/$VAR_NAME" \
-      #     -H "Accept: application/vnd.github+json" \
-      #     -H "Authorization: token ${{ secrets.TOKEN }}" \
-      #     -H "X-GitHub-Api-Version: 2022-11-28" \
-      #     -d "{\"value\":\"$NEW_VALUE\"}"
+          curl -s -X PATCH "https://api.github.com/repos/$REPO/actions/variables/$VAR_NAME" \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          -d "{\"value\":\"$NEW_VALUE\"}"
 
       - name: Set up SSH key
         run: |
