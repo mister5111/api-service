@@ -44,16 +44,16 @@ func Example(log *slog.Logger) http.HandlerFunc {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode("Example save POST request: http://localhost:8080/save")
+		json.NewEncoder(w).Encode("Example save POST request: http://localhost/save")
 		json.NewEncoder(w).Encode(exampleResponse)
 
-		json.NewEncoder(w).Encode("Example delete POST request: http://localhost:8080/del")
+		json.NewEncoder(w).Encode("Example delete POST request: http://localhost/del")
 		json.NewEncoder(w).Encode(exampleDel)
 
-		json.NewEncoder(w).Encode("Example show all rows GET request: http://localhost:8080/all")
+		json.NewEncoder(w).Encode("Example show all rows GET request: http://localhost/all")
 		json.NewEncoder(w).Encode(exampleAll)
 
-		json.NewEncoder(w).Encode("Example show one rows GET request: http://localhost:8080/all")
+		json.NewEncoder(w).Encode("Example show one rows GET request: http://localhost/all")
 		json.NewEncoder(w).Encode(exampleOneRows)
 
 		log.Info("Request Example", slog.String("status", "OK"))
