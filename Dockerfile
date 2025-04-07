@@ -1,4 +1,6 @@
-FROM golang:1.24.0 AS builder
+FROM golang:1.24.0-alpine AS builder
+
+RUN apk add --no-cache gcc musl-dev sqlite-dev
 
 WORKDIR /api-service
 
@@ -7,14 +9,22 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o api-service main.go
+ENV CGO_ENABLED=1
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+RUN go build -o api-service main.go
 RUN chmod +x api-service
 
-FROM scratch
+FROM alpine:latest
 
-WORKDIR /var/www/api-service
+RUN apk add --no-cache sqlite-libs curl
+
+WORKDIR /var/local/api-service
+
 COPY --from=builder /api-service/api-service .
 COPY --from=builder /api-service/conf ./conf
+COPY --from=builder /api-service/storage/storage.db ./storage/storage.db
 
 EXPOSE 80
 
