@@ -18,7 +18,7 @@ RUN chmod +x api-service
 
 FROM alpine:latest
 
-RUN apk add --no-cache sqlite-libs curl
+RUN apk add --no-cache sqlite-libs
 
 WORKDIR /var/local/api-service
 
