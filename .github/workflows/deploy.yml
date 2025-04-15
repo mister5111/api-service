@@ -14,7 +14,7 @@ jobs:
       - name: Git clone
         uses: actions/checkout@v1
 
-      - name: Create ZIP
+      - name: Create ZIP file
         run: |
             tar --exclude='.git' --exclude='.vscode' -cvf api-service.tar .
           
@@ -35,7 +35,7 @@ jobs:
             echo $IP_kodi-deploy-docker
             echo "IP_instances=$IP_kodi_deploy_docker" >> $GITHUB_ENV
 
-      - name: Update repository variable
+      - name: Update variable IP_instances
         run: |
           REPO="mister5111/api-service"
           VAR_NAME="IP_INSTANCES"
@@ -55,19 +55,19 @@ jobs:
           ls -la ~/.ssh/deploy
           
         
-      - name: Wait server sleep 20sec
+      - name: Wait instances UP
         run: |
           echo "$IP_instances"
           sleep 20
 
 
-      - name: Copy project
+      - name: Copy archive to instances
         run: |
           echo "$IP_instances"
           scp -i ~/.ssh/deploy -o 'StrictHostKeyChecking no' api-service.tar ${{ secrets.SSH_USER }}@$IP_instances:/home/deploy/
     
 
-      - name: Settings server
+      - name: Settings server and run docker
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/deploy ${{ secrets.SSH_USER }}@$IP_instances <<'ENDSSH'
           sudo -s
