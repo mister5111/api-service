@@ -27,5 +27,3 @@ COPY --from=builder /api-service/conf ./conf
 COPY --from=builder /api-service/storage/storage.db ./storage/storage.db
 
 EXPOSE 80
-
-CMD ["./api-service"]

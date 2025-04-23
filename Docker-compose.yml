@@ -1,0 +1,17 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+     - "80:81"
+    volumes:
+      - ./nginx/api-service.conf:/etc/nginx/conf.d/api-service.conf
+    restart: "always"
+
+  api-service:
+    build:
+      context: .
+      target: builder
+    container_name: api-service
+    command: ./api-service
+    restart: always
